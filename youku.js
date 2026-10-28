@@ -1,12 +1,12 @@
 var WidgetMetadata = {
-  id: "youku.video.pc.makka",
+  id: "youku.video.pc",
   title: "优酷片库",
-  version: "1.1.0",
+  version: "1.2.0",
   requiredVersion: "0.0.1",
   description: "优酷片库：按频道 + 地区 + 年份筛选，自动翻页，输出 TMDB 条目（含封面）。需配合 youku-worker 中转（优酷签名在浏览器环境算不了）",
-  author: "𝙈𝙖𝙠𝙠𝙖𝙋𝙖𝙠𝙠𝙖",
+  author: "Minis",
   globalParams: [
-    { name: "base", title: "API 地址", type: "input", default: "https://youku-api.xxx.workers.dev", description: "填你部署的 youku-worker 地址（优酷签名需在服务端计算）" }
+    { name: "base", title: "API 地址", type: "input", default: "", description: "留空使用内置地址；如需换自己的 Worker，在此填写完整地址" }
   ],
   modules: [
     {
@@ -78,13 +78,14 @@ var WidgetMetadata = {
   ]
 };
 
-var YK_FALLBACK = "https://youku-api.xxx.workers.dev";
+var YK_FALLBACK = "https://youku.518518.qzz.io";
 
 var YK_CAT = { tv: "电视剧", movie: "电影", variety: "综艺", anime: "动漫", doc: "纪录片", kids: "少儿" };
 
 async function ykFetch(category, params, page) {
   params = params || {};
-  var base = String(params.base || "").trim() || YK_FALLBACK;
+  var base = String(params.base || "").trim();
+  if (!/^https?:\/\//i.test(base)) base = YK_FALLBACK;
   if (base.charAt(base.length - 1) === "/") base = base.slice(0, -1);
   var u = base + "?category=" + encodeURIComponent(category) + "&page=" + (parseInt(page, 10) || 1);
   if (params.mainArea) u += "&area=" + encodeURIComponent(params.mainArea);
