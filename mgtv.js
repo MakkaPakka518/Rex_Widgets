@@ -1,10 +1,10 @@
 var WidgetMetadata = {
-  id: "mgtv.video.pc",
+  id: "mgtv.video.pc.makka",
   title: "芒果TV片库",
   version: "1.0.0",
   requiredVersion: "0.0.1",
   description: "芒果TV片库：每个频道独立筛选（类型/地区/年份/状态/资费/排序），可多级叠加，自动翻页，输出 TMDB 条目（含封面）",
-  author: "Minis",
+  author: "𝙈𝙖𝙠𝙠𝙖𝙋𝙖𝙠𝙠𝙖",
   modules: [
     {
       id: "mgTv",
