@@ -1,10 +1,10 @@
 var WidgetMetadata = {
-  id: "douyin.video.feed",
+  id: "douyin.video.feed.makka",
   title: "抖音",
   version: "2.6.1",
   requiredVersion: "0.0.1",
   description: "抖音片单 + 推荐流 + 合集 + TikTok（合集为一部剧，可逐集播放）",
-  author: "Minis",
+  author: "𝙈𝙖𝙠𝙠𝙖𝙋𝙖𝙠𝙠𝙖",
   globalParams: [
     { name: "base", title: "API 地址", type: "input", default: "", description: "填你部署的 douyin-worker 地址；留空使用内置地址" }
   ],
