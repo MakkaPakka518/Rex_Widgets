@@ -1,10 +1,10 @@
 var WidgetMetadata = {
-  id: "iqiyi.video.pc",
+  id: "iqiyi.video.pc.makka",
   title: "爱奇艺片库",
   version: "1.0.0",
   requiredVersion: "0.0.1",
   description: "爱奇艺片库：每个频道独立筛选（类型/地区/年份/排序/资费），可多级叠加，输出 TMDB 条目（含封面）",
-  author: "Minis",
+  author: "𝙈𝙖𝙠𝙠𝙖𝙋𝙖𝙠𝙠𝙖",
   modules: [
     {
       id: "iqTv",
