@@ -1,10 +1,10 @@
 var WidgetMetadata = {
-  id: "youku.video.pc",
+  id: "youku.video.pc.makka",
   title: "优酷片库",
   version: "1.2.0",
   requiredVersion: "0.0.1",
   description: "优酷片库：按频道 + 地区 + 年份筛选，自动翻页，输出 TMDB 条目（含封面）。需配合 youku-worker 中转（优酷签名在浏览器环境算不了）",
-  author: "Minis",
+  author: "𝙈𝙖𝙠𝙠𝙖𝙋𝙖𝙠𝙠𝙖",
   globalParams: [
     { name: "base", title: "API 地址", type: "input", default: "", description: "留空使用内置地址；如需换自己的 Worker，在此填写完整地址" }
   ],
