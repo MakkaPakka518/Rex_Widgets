@@ -1,10 +1,10 @@
 var WidgetMetadata = {
-  id: "mgtv.video.pc.makka",
+  id: "mgtv.video.pc",
   title: "芒果TV片库",
   version: "1.0.0",
   requiredVersion: "0.0.1",
   description: "芒果TV片库：每个频道独立筛选（类型/地区/年份/状态/资费/排序），可多级叠加，自动翻页，输出 TMDB 条目（含封面）",
-  author: "𝙈𝙖𝙠𝙠𝙖𝙋𝙖𝙠𝙠𝙖",
+  author: "Minis",
   modules: [
     {
       id: "mgTv",
@@ -110,7 +110,7 @@ async function mgFetch(cid, params, page) {
   params = params || {};
   var q = {
     allowedRC: "1", platform: "pcweb", channelId: cid,
-    pn: parseInt(page, 10) || 1, pc: 80, hudong: 1, _support: "10000000"
+    pn: parseInt(page, 10) || 1, pc: 24, hudong: 1, _support: "10000000"
   };
   for (var i = 0; i < MG_KEYS.length; i++) {
     var k = MG_KEYS[i];
@@ -225,13 +225,34 @@ function mgBest(results, names, year, kind) {
   };
 }
 
+var MG_TMDB_SLOT = 8;
+var MG_TMDB_BUSY = 0;
+var MG_TMDB_QUEUE = [];
+
+function mgAcquire() {
+  if (MG_TMDB_BUSY < MG_TMDB_SLOT) { MG_TMDB_BUSY++; return Promise.resolve(); }
+  return new Promise(function (res) { MG_TMDB_QUEUE.push(res); });
+}
+function mgRelease() {
+  var next = MG_TMDB_QUEUE.shift();
+  if (next) next(); else MG_TMDB_BUSY--;
+}
+function mgSleep(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+
 async function mgSearch(kind, query) {
-  try {
-    var r = await Widget.tmdb.get("search/" + kind, { params: { query: query, language: "zh-CN", include_adult: "false" } });
-    return (r && r.results) || [];
-  } catch (e) {
-    return [];
+  for (var attempt = 0; attempt < 3; attempt++) {
+    await mgAcquire();
+    try {
+      var r = await Widget.tmdb.get("search/" + kind, { params: { query: query, language: "zh-CN", include_adult: "false" } });
+      mgRelease();
+      return (r && r.results) || [];
+    } catch (e) {
+      mgRelease();
+      if (attempt === 2) return [];
+      await mgSleep(250 * (attempt + 1));
+    }
   }
+  return [];
 }
 
 async function cacheGet(key) {
@@ -254,10 +275,8 @@ async function mgMatchOne(card, kind) {
   if (cached) return cached.id ? cached : null;
   var names = mgVariants(card.title).slice(0, 2);
   var hit = null;
-  for (var i = 0; i < names.length && !hit; i++) {
-    var res = await mgSearch(kind, names[i]);
-    hit = mgBest(res, names, card.year, kind);
-  }
+  var rs = await Promise.all(names.map(function (n) { return mgSearch(kind, n); }));
+  for (var i = 0; i < rs.length && !hit; i++) hit = mgBest(rs[i], names, card.year, kind);
   if (!hit) {
     var alt = kind === "tv" ? "movie" : "tv";
     var res2 = await mgSearch(alt, names[0]);
@@ -301,7 +320,7 @@ async function mgResolveAll(cards, kind) {
       out.push(item);
     }
   }
-  await Promise.all([worker(), worker(), worker(), worker(), worker(), worker(), worker(), worker(), worker(), worker(), worker(), worker()]);
+  await Promise.all(Array.from({ length: 30 }, function () { return worker(); }));
   return out;
 }
 
