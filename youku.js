@@ -1,5 +1,5 @@
 var WidgetMetadata = {
-  id: "youku.video.pc",
+  id: "youku.video.pc.makka",
   title: "优酷片库",
   version: "1.1.0",
   requiredVersion: "0.0.1",
