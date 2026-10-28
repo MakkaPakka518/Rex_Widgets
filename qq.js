@@ -1,10 +1,10 @@
 var WidgetMetadata = {
-  id: "qq.video.pc",
+  id: "qq.video.pc.makka",
   title: "腾讯视频片库",
-  version: "4.0.0",
+  version: "1.0.0",
   requiredVersion: "0.0.1",
   description: "腾讯视频电脑版片库：每个频道独立筛选维度，可叠加分类 + 地区 + 年份 + 排序，输出 TMDB 条目（含封面）",
-  author: "Minis",
+  author: "𝙈𝙖𝙠𝙠𝙖𝙋𝙖𝙠𝙠𝙖",
   modules: [
     {
       id: "qqTv",
